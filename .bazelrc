@@ -49,9 +49,15 @@ build:android_arm --config=android
 build:android_arm --cpu=armeabi-v7a
 build:android_arm --fat_apk_cpu=armeabi-v7a
 
+build:android_arm_static --config=android_arm
+build:android_arm_static --linkopt=-lc++_static
+
 build:android_arm64 --config=android
 build:android_arm64 --cpu=arm64-v8a
 build:android_arm64 --fat_apk_cpu=arm64-v8a
+
+build:android_arm64_static --config=android_arm64
+build:android_arm64_static --linkopt=-lc++_static
 
 # iOS configs.
 build:ios --apple_platform_type=ios
