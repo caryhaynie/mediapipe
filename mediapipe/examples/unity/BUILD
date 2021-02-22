@@ -18,12 +18,13 @@ package(default_visibility = [
     "//visibility:public",
 ])
 
-cc_library(
-    name = "simple_run_graph_main",
+cc_binary(
+    name = "libmediapipe_unity.so",
+    linkshared = 1,
     srcs = ["simple_run_graph_main.cc"],
+    data = ["//mediapipe/examples/android/src/java/com/google/mediapipe/apps/objectdetection3d:binary_graph"],
     deps = [
         "//mediapipe/framework:calculator_framework",
-        "//mediapipe/framework/port:commandlineflags",
         "//mediapipe/framework/port:file_helpers",
         "//mediapipe/framework/port:map_util",
         "//mediapipe/framework/port:parse_text_proto",
@@ -33,4 +34,10 @@ cc_library(
         "@com_google_absl//absl/strings",
         "//mediapipe/graphs/object_detection_3d:mobile_calculators"
     ],
+)
+
+cc_library(
+    name = "unity",
+    alwayslink = 1,
+    deps = [":libmediapipe_unity.so"]
 )

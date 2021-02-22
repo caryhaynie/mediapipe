@@ -88,6 +88,7 @@ genrule(
     }),
     outs = ["object_detection_3d.binarypb"],
     cmd = "cp $< $@",
+    visibility = ["//visibility:public"]
 )
 
 MODELS_DIR = "//mediapipe/models"
