@@ -168,5 +168,6 @@ mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents) {
 // }
 
 EXPORT(absl::StatusCode) UnityObjectron_RunMPPGraph(const char* buffer, int32_t length) {
+    LOG(INFO) << "Loading protobuf file\n" << buffer;
     return RunMPPGraph(std::string(buffer, length)).code();
 }
