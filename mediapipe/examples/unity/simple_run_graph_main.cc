@@ -24,13 +24,27 @@
 #include "absl/strings/str_split.h"
 #include "absl/strings/string_view.h"
 #include "mediapipe/framework/calculator_framework.h"
-#include "mediapipe/framework/port/commandlineflags.h"
+// #include "mediapipe/framework/port/commandlineflags.h"
 #include "mediapipe/framework/port/file_helpers.h"
 #include "mediapipe/framework/port/map_util.h"
 #include "mediapipe/framework/port/parse_text_proto.h"
 #include "mediapipe/framework/port/ret_check.h"
 #include "mediapipe/framework/port/status.h"
 #include "mediapipe/framework/port/statusor.h"
+
+#ifdef __cplusplus
+#   define EXTERN extern "C"
+#else
+#   define EXTERN
+#endif
+
+#define EXPORT(RET) EXTERN RET __attribute__ ((visibility ("default")))
+
+#define DEFINE_string(v, defaultValue, desc) \
+    std::string FLAGS_ ## v = defaultValue
+
+#define DEFINE_bool(v, defaultValue, desc) \
+    bool FLAGS_ ## v = defaultValue
 
 DEFINE_string(
     calculator_graph_config_file, "",
@@ -99,10 +113,10 @@ mediapipe::Status OutputSidePacketsToLocalFile(
   return mediapipe::OkStatus();
 }
 
-mediapipe::Status RunMPPGraph() {
-  std::string calculator_graph_config_contents;
-  MP_RETURN_IF_ERROR(mediapipe::file::GetContents(
-      FLAGS_calculator_graph_config_file, &calculator_graph_config_contents));
+mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents) {
+//   std::string calculator_graph_config_contents;
+//   MP_RETURN_IF_ERROR(mediapipe::file::GetContents(
+//       FLAGS_calculator_graph_config_file, &calculator_graph_config_contents));
   LOG(INFO) << "Get calculator graph config contents: "
             << calculator_graph_config_contents;
   mediapipe::CalculatorGraphConfig config =
@@ -140,15 +154,19 @@ mediapipe::Status RunMPPGraph() {
   return OutputSidePacketsToLocalFile(graph);
 }
 
-int main(int argc, char** argv) {
-  google::InitGoogleLogging(argv[0]);
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
-  mediapipe::Status run_status = RunMPPGraph();
-  if (!run_status.ok()) {
-    LOG(ERROR) << "Failed to run the graph: " << run_status.message();
-    return EXIT_FAILURE;
-  } else {
-    LOG(INFO) << "Success!";
-  }
-  return EXIT_SUCCESS;
+// int main(int argc, char** argv) {
+//   google::InitGoogleLogging(argv[0]);
+//   gflags::ParseCommandLineFlags(&argc, &argv, true);
+//   mediapipe::Status run_status = RunMPPGraph();
+//   if (!run_status.ok()) {
+//     LOG(ERROR) << "Failed to run the graph: " << run_status.message();
+//     return EXIT_FAILURE;
+//   } else {
+//     LOG(INFO) << "Success!";
+//   }
+//   return EXIT_SUCCESS;
+// }
+
+EXPORT(absl::StatusCode) UnityObjectron_RunMPPGraph(const char* buffer, int32_t length) {
+    return RunMPPGraph(std::string(buffer, length)).code();
 }
