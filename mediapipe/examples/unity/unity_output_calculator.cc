@@ -17,8 +17,8 @@ namespace unity {
 
 namespace
 {
-  constexpr char kOutputLandmarksTag[] = "MULTI_LANDMARKS";
-  constexpr char kOutputNormRectsTag[] = "NORM_RECTS";
+  constexpr char kInputLandmarksTag[] = "MULTI_LANDMARKS";
+  constexpr char kInputNormRectsTag[] = "NORM_RECTS";
 
 }  // namespace
 
@@ -26,8 +26,8 @@ class UnityOutputCalculator : public CalculatorBase {
  public:
 
   static mediapipe::Status GetContract(CalculatorContract* cc) {
-    cc->Inputs().Tag(kOutputLandmarksTag).Set<std::vector<::mediapipe::NormalizedLandmarkList>>();
-    cc->Inputs().Tag(kOutputNormRectsTag).Set<std::vector<NormalizedRect>>();
+    cc->Inputs().Tag(kInputLandmarksTag).Set<std::vector<::mediapipe::NormalizedLandmarkList>>();
+    cc->Inputs().Tag(kInputNormRectsTag).Set<std::vector<NormalizedRect>>();
     return mediapipe::OkStatus();
   }
 
