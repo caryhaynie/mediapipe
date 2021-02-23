@@ -148,20 +148,8 @@ mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents) {
   return OutputSidePacketsToLocalFile(graph);
 }
 
-// int main(int argc, char** argv) {
-//   google::InitGoogleLogging(argv[0]);
-//   gflags::ParseCommandLineFlags(&argc, &argv, true);
-//   mediapipe::Status run_status = RunMPPGraph();
-//   if (!run_status.ok()) {
-//     LOG(ERROR) << "Failed to run the graph: " << run_status.message();
-//     return EXIT_FAILURE;
-//   } else {
-//     LOG(INFO) << "Success!";
-//   }
-//   return EXIT_SUCCESS;
-// }
-
 EXPORT(absl::StatusCode) UnityObjectron_RunMPPGraph(const char* buffer, int32_t length) {
-    LOG(INFO) << "Loading protobuf file\n" << buffer;
-    return RunMPPGraph(std::string(buffer, length)).code();
+    auto status = RunMPPGraph(std::string(buffer, length));
+    LOG(INFO) << "RunMPPGraph returned " << status;
+    return status.code();
 }
