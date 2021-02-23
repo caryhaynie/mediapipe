@@ -63,7 +63,7 @@ class UnityVideoCalculator : public CalculatorBase {
   static mediapipe::Status GetContract(CalculatorContract* cc) {
     // cc->InputSidePackets().Tag("INPUT_FILE_PATH").Set<std::string>();
     // cc->InputSidePackets().Tag("INPUT_FILE_PATH").Set<std::string>();
-    // cc->Outputs().Tag("VIDEO").Set<ImageFrame>();
+    cc->Outputs().Tag("VIDEO").Set<ImageFrame>();
     // if (cc->Outputs().HasTag("VIDEO_PRESTREAM")) {
     //   cc->Outputs().Tag("VIDEO_PRESTREAM").Set<VideoHeader>();
     // }

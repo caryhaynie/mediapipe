@@ -17,7 +17,6 @@ node {
 node {
   calculator: "UnityVideoCalculator"
   output_stream: "VIDEO:input_video"
-  output_stream: "VIDEO_PRESTREAM:input_video_header"
 }
 
 node {
