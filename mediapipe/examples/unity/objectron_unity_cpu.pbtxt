@@ -1,7 +1,6 @@
 # MediaPipe Objectron 3D object detection on Desktop CPU using Unity.
 input_side_packet: "FILE_PATH:0:box_landmark_model_path"
 input_side_packet: "LABELS_CSV:allowed_labels"
-input_side_packet: "OUTPUT_FILE_PATH:output_video_path"
 
 # Generates side packet with max number of objects to detect/track.
 node {
