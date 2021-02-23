@@ -19,6 +19,7 @@ namespace
     typedef void(*on_open_t)(void);
     typedef void(*on_process_t)(void);
     typedef void(*on_close_t)(void);
+    typedef ImageFrame(*get_image_frame_t)(void);
 }  // namespace
 
 // This Calculator takes no input streams and produces video packets.
@@ -127,9 +128,10 @@ class UnityVideoCalculator : public CalculatorBase {
   }
 
   mediapipe::Status Process(CalculatorContext* cc) override {
-      // TODO
-    // auto image_frame = absl::make_unique<ImageFrame>(format_, width_, height_,
-    //                                                  /*alignment_boundary=*/1);
+    LOG(INFO) << "Process called on UnityVideoCalculator";
+
+    auto image_frame = absl::make_unique<ImageFrame>(format_, width_, height_,
+                                                     /*alignment_boundary=*/1);
     // // Use microsecond as the unit of time.
     // Timestamp timestamp(cap_->get(cv::CAP_PROP_POS_MSEC) * 1000);
     // if (format_ == ImageFormat::GRAY8) {
@@ -181,6 +183,7 @@ class UnityVideoCalculator : public CalculatorBase {
   static on_open_t OnOpen;
   static on_process_t OnProcess;
   static on_close_t OnClose;
+  static get_image_frame_t GetImageFrame;
   Timestamp prev_timestamp_ = Timestamp::Unset();
 };
 
@@ -189,12 +192,14 @@ REGISTER_CALCULATOR(UnityVideoCalculator);
 on_open_t UnityVideoCalculator::OnOpen = nullptr;
 on_process_t UnityVideoCalculator::OnProcess = nullptr;
 on_close_t UnityVideoCalculator::OnClose = nullptr;
+get_image_frame_t UnityVideoCalculator::GetImageFrame = nullptr;
 
-void VideoCalculator_SetCallbacks(on_open_t onOpen, on_process_t onProcess, on_close_t onClose)
+void VideoCalculator_SetCallbacks(on_open_t onOpen, on_process_t onProcess, on_close_t onClose, get_image_frame_t getImageFrame)
 {
     UnityVideoCalculator::OnOpen = onOpen;
     UnityVideoCalculator::OnProcess = onProcess;
     UnityVideoCalculator::OnClose = onClose;
+    UnityVideoCalculator::GetImageFrame = getImageFrame;
 }
 
 EXTERN(ImageFrame*) UnityMediaPipe_ImageFrame_ctor()
@@ -208,4 +213,3 @@ EXTERN(void) UnityMediaPipe_ImageFrame_CopyPixelData(ImageFrame* imageFrame, Ima
 }
 
 }  // namespace mediapipe
-
