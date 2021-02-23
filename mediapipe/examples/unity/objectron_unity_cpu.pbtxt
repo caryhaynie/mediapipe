@@ -1,5 +1,5 @@
 # MediaPipe Objectron 3D object detection on Desktop CPU using Unity.
-input_side_packet: "FILE_PATH:0:box_landmark_model_path"
+input_side_packet: "MODEL_BLOB:box_landmark_model_blob"
 input_side_packet: "LABELS_CSV:allowed_labels"
 
 # Generates side packet with max number of objects to detect/track.
@@ -17,12 +17,6 @@ node {
 node {
   calculator: "UnityVideoCalculator"
   output_stream: "VIDEO:input_video"
-}
-
-node {
-  calculator: "LocalFileContentsCalculator"
-  input_side_packet: "FILE_PATH:0:box_landmark_model_path"
-  output_side_packet: "CONTENTS:0:box_landmark_model_blob"
 }
 
 node {
