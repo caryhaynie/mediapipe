@@ -132,11 +132,14 @@ class UnityVideoCalculator : public CalculatorBase {
 
     if (GetImageFrame != nullptr)
     {
-        uint64_t timestamp;
-        auto imageFrame = GetImageFrame(&timestamp);
-        if (imageFrame != nullptr)
+        uint64_t ts;
+        auto imageFrame = GetImageFrame(&ts);
+        Timestamp timestamp(ts);
+        if (imageFrame != nullptr && prev_timestamp_ < timestamp)
         {
-            cc->Outputs().Tag("VIDEO").Add(imageFrame, Timestamp(timestamp));
+            LOG(INFO) << "Got image frame " << imageFrame->Width() << "x" << imageFrame->Height();
+            cc->Outputs().Tag("VIDEO").Add(imageFrame, timestamp);
+            prev_timestamp_ = timestamp;
         }
     }
 
