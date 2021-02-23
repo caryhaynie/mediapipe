@@ -130,8 +130,13 @@ class UnityVideoCalculator : public CalculatorBase {
   mediapipe::Status Process(CalculatorContext* cc) override {
     LOG(INFO) << "Process called on UnityVideoCalculator";
 
-    auto image_frame = absl::make_unique<ImageFrame>(format_, width_, height_,
-                                                     /*alignment_boundary=*/1);
+    if (GetImageFrame != nullptr)
+    {
+        // GetImageFrame();
+    }
+
+    // auto image_frame = absl::make_unique<ImageFrame>(format_, width_, height_,
+    //                                                  /*alignment_boundary=*/1);
     // // Use microsecond as the unit of time.
     // Timestamp timestamp(cap_->get(cv::CAP_PROP_POS_MSEC) * 1000);
     // if (format_ == ImageFormat::GRAY8) {
@@ -177,9 +182,9 @@ class UnityVideoCalculator : public CalculatorBase {
     return mediapipe::OkStatus();
   }
 
-  friend void VideoCalculator_SetCallbacks(on_open_t, on_process_t, on_close_t);
+  friend void VideoCalculator_SetCallbacks(on_open_t, on_process_t, on_close_t, get_image_frame_t);
 
- private:
+ public:
   static on_open_t OnOpen;
   static on_process_t OnProcess;
   static on_close_t OnClose;
@@ -202,12 +207,17 @@ void VideoCalculator_SetCallbacks(on_open_t onOpen, on_process_t onProcess, on_c
     UnityVideoCalculator::GetImageFrame = getImageFrame;
 }
 
-EXTERN(ImageFrame*) UnityMediaPipe_ImageFrame_ctor()
+EXPORT(void) UnityMediaPipe_VideoCalculator_SetCallbacks(on_open_t onOpen, on_process_t onProcess, on_close_t onClose, get_image_frame_t getImageFrame)
+{
+    VideoCalculator_SetCallbacks(onOpen, onProcess, onClose, getImageFrame);
+}
+
+EXPORT(ImageFrame*) UnityMediaPipe_ImageFrame_ctor()
 {
     return new ImageFrame();
 }
 
-EXTERN(void) UnityMediaPipe_ImageFrame_CopyPixelData(ImageFrame* imageFrame, ImageFrame::Format format, int width, int height, int widthStep, const uint8_t* pixelData, uint32_t alignmentBoundary)
+EXPORT(void) UnityMediaPipe_ImageFrame_CopyPixelData(ImageFrame* imageFrame, ImageFormat::Format format, int width, int height, int widthStep, const uint8_t* pixelData, uint32_t alignmentBoundary)
 {
     imageFrame->CopyPixelData(format, width, height, widthStep, pixelData, alignmentBoundary);
 }
