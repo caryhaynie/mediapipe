@@ -35,6 +35,7 @@ cc_library(
         "//mediapipe/framework/port:status",
         "//mediapipe/framework/tool:status_util"
     ],
+    alwayslink = 1
 )
 
 cc_library(
@@ -49,6 +50,7 @@ cc_library(
         "//mediapipe/framework/port:status",
         "//mediapipe/framework/tool:status_util"
     ],
+    alwayslink = 1
 )
 
 cc_library(
