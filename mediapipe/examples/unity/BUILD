@@ -21,7 +21,11 @@ package(default_visibility = [
 cc_binary(
     name = "libmediapipe_unity.so",
     linkshared = 1,
-    srcs = ["simple_run_graph_main.cc"],
+    srcs = [
+        "export.h",
+        "simple_run_graph_main.cc",
+        "unity_video_calculator.cc"
+    ],
     data = ["//mediapipe/examples/android/src/java/com/google/mediapipe/apps/objectdetection3d:binary_graph"],
     deps = [
         "//mediapipe/framework:calculator_framework",
