@@ -19,7 +19,7 @@ namespace
     typedef void(*on_open_t)(void);
     typedef void(*on_process_t)(void);
     typedef void(*on_close_t)(void);
-    typedef ImageFrame(*get_image_frame_t)(void);
+    typedef ImageFrame*(*get_image_frame_t)(uint64_t* timestampInMicrosecondsOut);
 }  // namespace
 
 // This Calculator takes no input streams and produces video packets.
@@ -132,7 +132,12 @@ class UnityVideoCalculator : public CalculatorBase {
 
     if (GetImageFrame != nullptr)
     {
-        // GetImageFrame();
+        uint64_t timestamp;
+        auto imageFrame = GetImageFrame(&timestamp);
+        if (imageFrame != nullptr)
+        {
+            cc->Outputs().Tag("VIDEO").Add(imageFrame, Timestamp(timestamp));
+        }
     }
 
     // auto image_frame = absl::make_unique<ImageFrame>(format_, width_, height_,
