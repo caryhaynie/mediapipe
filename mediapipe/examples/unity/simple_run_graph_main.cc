@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 
+#include "export.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
 #include "absl/strings/string_view.h"
@@ -31,14 +32,6 @@
 #include "mediapipe/framework/port/ret_check.h"
 #include "mediapipe/framework/port/status.h"
 #include "mediapipe/framework/port/statusor.h"
-
-#ifdef __cplusplus
-#   define EXTERN extern "C"
-#else
-#   define EXTERN
-#endif
-
-#define EXPORT(RET) EXTERN RET __attribute__ ((visibility ("default")))
 
 #define DEFINE_string(v, defaultValue, desc) \
     std::string FLAGS_ ## v = defaultValue
@@ -142,6 +135,7 @@ mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents) {
                      graph.AddOutputStreamPoller(FLAGS_output_stream));
     LOG(INFO) << "Start running the calculator graph.";
     MP_RETURN_IF_ERROR(graph.StartRun({}));
+    LOG(INFO) << "Start output stream to local file.";
     MP_RETURN_IF_ERROR(OutputStreamToLocalFile(poller));
   } else {
     RET_CHECK(FLAGS_output_stream.empty() && FLAGS_output_stream_file.empty())
