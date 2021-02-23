@@ -66,9 +66,14 @@ cc_binary(
     data = ["//mediapipe/examples/android/src/java/com/google/mediapipe/apps/objectdetection3d:binary_graph"],
     deps = [
         ":export_header",
-        "//mediapipe/graphs/object_detection_3d:desktop_cpu_calculators",
-        "//mediapipe/graphs/object_detection_3d:mobile_calculators",
-        ":unity_calculators"
+        "//mediapipe/calculators/core:constant_side_packet_calculator",
+        "//mediapipe/calculators/tflite:tflite_model_calculator",
+        "//mediapipe/calculators/util:local_file_contents_calculator",
+        "//mediapipe/framework/port:file_helpers",
+        "//mediapipe/modules/objectron:objectron_cpu",
+        ":unity_calculators",
+        #"//mediapipe/graphs/object_detection_3d:desktop_cpu_calculators",
+        #"//mediapipe/graphs/object_detection_3d:mobile_calculators",
     ],
 )
 
