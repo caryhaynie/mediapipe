@@ -210,6 +210,7 @@ void VideoCalculator_SetCallbacks(on_open_t onOpen, on_process_t onProcess, on_c
     UnityVideoCalculator::OnProcess = onProcess;
     UnityVideoCalculator::OnClose = onClose;
     UnityVideoCalculator::GetImageFrame = getImageFrame;
+    LOG(INFO) << "UnityVideoCalculator: Callbacks set";
 }
 
 EXPORT(void) UnityMediaPipe_VideoCalculator_SetCallbacks(on_open_t onOpen, on_process_t onProcess, on_close_t onClose, get_image_frame_t getImageFrame)
