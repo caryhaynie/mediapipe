@@ -194,5 +194,15 @@ EXTERN(void) UnityMediaPipe_VideoCalculator_SetCallbacks(on_open_t onOpen, on_pr
     UnityVideoCalculator::OnClose = onClose;
 }
 
+EXTERN(ImageFrame*) UnityMediaPipe_ImageFrame_ctor()
+{
+    return new ImageFrame();
+}
+
+EXTERN(void) UnityMediaPipe_ImageFrame_CopyPixelData(ImageFrame* imageFrame, ImageFrame::Format format, int width, int height, int widthStep, const uint8_t* pixelData, uint32_t alignmentBoundary)
+{
+    imageFrame->CopyPixelData(format, width, height, widthStep, pixelData, alignmentBoundary);
+}
+
 }  // namespace mediapipe
 
