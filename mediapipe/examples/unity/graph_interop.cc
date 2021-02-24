@@ -9,7 +9,7 @@
 #define LOG_AND_RETURN(CODE) \
     do { \
         const auto result = CODE; \
-        LOG(INFO) << result; \
+        LOG(INFO) << __PRETTY_FUNCTION__ << ": " << result; \
         return result; \
     } while (0)
 
