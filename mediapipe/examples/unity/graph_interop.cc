@@ -9,7 +9,7 @@
 #define LOG_AND_RETURN(CODE) \
     do { \
         const auto result = CODE; \
-        LOG(INFO) << __PRETTY_FUNCTION__ << ":\n" << result; \
+        LOG(INFO) << result; \
         return result; \
     } while (0)
 
@@ -55,7 +55,13 @@ EXPORT(void) UnityMediaPipe_Graph_SetStringInputSidePacket(
     Graph* self, const char* key, int32_t keyLength,
     const char* value, int32_t valueLength)
 {
+    LOG(INFO) << "Setting " << key << " to a value of length " << valueLength;
     self->SetInputSidePacket(std::string(key, keyLength), std::string(value, valueLength));
+}
+
+EXPORT(absl::StatusCode) UnityMediaPipe_Graph_Initialize(Graph* self)
+{
+    return self->Initialize().code();
 }
 
 EXPORT(absl::StatusCode) UnityMediaPipe_Graph_Start(Graph* self)
