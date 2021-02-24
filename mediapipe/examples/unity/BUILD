@@ -18,22 +18,11 @@ package(default_visibility = [
     "//visibility:public",
 ])
 
+load("//mediapipe/examples/unity:embed_graph.bzl", "mediapipe_embed_graph")
+
 cc_library(
     name = "export_header",
     hdrs = ["export.h"]
-)
-
-cc_library(
-    name = "graph_interop",
-    srcs = ["graph_interop.cc"],
-    deps = [
-        ":export_header",
-        "//mediapipe/framework:calculator_framework",
-        "//mediapipe/framework/port:parse_text_proto",
-        "//mediapipe/framework/port:status",
-        "//mediapipe/framework/tool:status_util"
-    ],
-    alwayslink = 1
 )
 
 cc_library(
@@ -109,6 +98,30 @@ cc_library(
         "//mediapipe/framework/port:map_util",
         "//mediapipe/framework/port:parse_text_proto",
     ]
+)
+
+mediapipe_embed_graph(
+    name = "objectron_unity_cpu",
+    graph = "//mediapipe/examples/unity:objectron_unity_cpu.pbtxt",
+    register_as = "UnityObjectronCpuGraph",
+    deps = [
+        ":unity_calculators",
+        "//mediapipe/calculators/core:constant_side_packet_calculator",
+    ]
+)
+
+cc_library(
+    name = "graph_interop",
+    srcs = ["graph_interop.cc"],
+    deps = [
+        ":export_header",
+        ":objectron_unity_cpu",
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework/port:parse_text_proto",
+        "//mediapipe/framework/port:status",
+        "//mediapipe/framework/tool:status_util"
+    ],
+    alwayslink = 1
 )
 
 cc_binary(

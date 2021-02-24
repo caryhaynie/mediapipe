@@ -13,14 +13,18 @@
         return result; \
     } while (0)
 
+namespace mediapipe {
+    StatusOr<CalculatorGraphConfig> LoadUnityObjectronCpuGraphConfig();
+}
+
 namespace unity {
     using namespace mediapipe;
 
 class Graph {
 public:
-    Graph(const std::string& configContents)
+    Graph()
     {
-        m_Config = mediapipe::ParseTextProtoOrDie<mediapipe::CalculatorGraphConfig>(configContents);
+        m_Config = mediapipe::LoadUnityObjectronCpuGraphConfig().ValueOrDie();
     }
 
     template<typename T>
@@ -45,11 +49,7 @@ private:
     std::map<std::string, mediapipe::Packet> m_InputSidePackets;
 };
 
-EXPORT(Graph*) UnityMediaPipe_Graph_Construct_ConfigContents_(
-    const char* configContents, int32_t length)
-{
-    return new Graph(std::string(configContents, length));
-}
+EXPORT(Graph*) UnityMediaPipe_Graph_Construct_() { return new Graph(); }
 
 EXPORT(void) UnityMediaPipe_Graph_SetStringInputSidePacket(
     Graph* self, const char* key, int32_t keyLength,
