@@ -29,11 +29,8 @@ cc_library(
     deps = [
         ":export_header",
         "//mediapipe/framework:calculator_framework",
-        "//mediapipe/framework/formats:image_frame",
-        "//mediapipe/framework/formats:image_frame_opencv",
         "//mediapipe/framework/formats:landmark_registration",
         "//mediapipe/framework/formats:rect_registration",
-        "//mediapipe/framework/port:parse_text_proto",
         "//mediapipe/framework/port:status",
         "//mediapipe/framework/tool:status_util"
     ],
@@ -47,8 +44,6 @@ cc_library(
         ":export_header",
         "//mediapipe/framework:calculator_framework",
         "//mediapipe/framework/formats:image_frame",
-        "//mediapipe/framework/formats:image_frame_opencv",
-        "//mediapipe/framework/port:parse_text_proto",
         "//mediapipe/framework/port:status",
         "//mediapipe/framework/tool:status_util"
     ],
@@ -63,19 +58,30 @@ cc_library(
     ]
 )
 
+cc_library(
+    name = "entry_point",
+    srcs = ["simple_run_graph_main.cc"],
+    deps = [
+        ":export_header",
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework/port:file_helpers",
+        "//mediapipe/framework/port:map_util",
+        "//mediapipe/framework/port:parse_text_proto",
+    ]
+)
+
 cc_binary(
     name = "libmediapipe_unity.so",
     linkshared = 1,
-    srcs = ["simple_run_graph_main.cc"],
-    data = ["//mediapipe/examples/android/src/java/com/google/mediapipe/apps/objectdetection3d:binary_graph"],
+    #data = ["//mediapipe/examples/android/src/java/com/google/mediapipe/apps/objectdetection3d:binary_graph"],
     deps = [
+        ":entry_point",
         ":export_header",
+        ":unity_calculators",
         "//mediapipe/calculators/core:constant_side_packet_calculator",
         "//mediapipe/calculators/tflite:tflite_model_calculator",
-        #"//mediapipe/calculators/util:local_file_contents_calculator",
-        "//mediapipe/framework/port:file_helpers",
-        "//mediapipe/modules/objectron:objectron_cpu",
-        ":unity_calculators",
+        "//mediapipe/examples/unity/subgraphs:unity_subgraphs",
+        #"//mediapipe/modules/objectron:objectron_cpu",
         #"//mediapipe/graphs/object_detection_3d:desktop_cpu_calculators",
         #"//mediapipe/graphs/object_detection_3d:mobile_calculators",
     ],
