@@ -32,7 +32,8 @@ cc_library(
         "//mediapipe/framework/port:parse_text_proto",
         "//mediapipe/framework/port:status",
         "//mediapipe/framework/tool:status_util"
-    ]
+    ],
+    alwayslink = 1
 )
 
 cc_library(
