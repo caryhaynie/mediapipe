@@ -28,8 +28,8 @@ node {
 
 node {
   calculator: "TfLiteModelCalculator"
-  input_side_packet: "MODEL2D_BLOB:inference_model_blob"
-  output_side_packet: "MODEL2D:inference_model"
+  input_side_packet: "MODEL_BLOB:inference_model_blob"
+  output_side_packet: "MODEL:inference_model"
 }
 
 node {

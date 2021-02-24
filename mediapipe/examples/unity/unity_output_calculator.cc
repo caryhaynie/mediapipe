@@ -37,6 +37,10 @@ class UnityOutputCalculator : public CalculatorBase {
 
   mediapipe::Status Process(CalculatorContext* cc) override {
     LOG(INFO) << "Process called on UnityOutputCalculator";
+    auto landmarks = cc->Inputs().Tag(kInputLandmarksTag).Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
+    auto rects = cc->Inputs().Tag(kInputNormRectsTag).Get<std::vector<NormalizedRect>>();
+    LOG(INFO) << "landmarks size: " << landmarks.size();
+    LOG(INFO) << "rects size: " << rects.size();
     return mediapipe::OkStatus();
   }
 
