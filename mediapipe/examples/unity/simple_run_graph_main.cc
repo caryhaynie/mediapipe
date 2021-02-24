@@ -106,7 +106,7 @@ mediapipe::Status OutputSidePacketsToLocalFile(
   return mediapipe::OkStatus();
 }
 
-mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents, std::string model) {
+mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents, std::string model, std::string model_2d) {
 //   std::string calculator_graph_config_contents;
 //   MP_RETURN_IF_ERROR(mediapipe::file::GetContents(
 //       FLAGS_calculator_graph_config_file, &calculator_graph_config_contents));
@@ -129,6 +129,7 @@ mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents, std:
 //   }
 
   input_side_packets["box_landmark_model_blob"] = mediapipe::MakePacket<std::string>(model);
+  input_side_packets["inference_model_blob"] = mediapipe::MakePacket<std::string>(model_2d);
   input_side_packets["allowed_labels"] = mediapipe::MakePacket<std::string>("Mug");
 
   LOG(INFO) << "Initialize the calculator graph.";
@@ -153,8 +154,9 @@ mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents, std:
 }
 
 EXPORT(absl::StatusCode) UnityObjectron_RunMPPGraph(const char* buffer, int32_t length,
-                                                    const char* modelBuffer, int32_t modelLength) {
-    auto status = RunMPPGraph(std::string(buffer, length), std::string(modelBuffer, modelLength));
+                                                    const char* modelBuffer, int32_t modelLength,
+                                                    const char* model2dBuffer, int32_t model2dLength) {
+    auto status = RunMPPGraph(std::string(buffer, length), std::string(modelBuffer, modelLength), std::string(model2dBuffer, model2dLength));
     LOG(INFO) << "RunMPPGraph returned " << status;
     return status.code();
 }
