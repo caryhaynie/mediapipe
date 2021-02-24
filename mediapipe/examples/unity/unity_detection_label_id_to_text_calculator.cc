@@ -105,9 +105,11 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::Process(
     Detection& output_detection = output_detections.back();
     bool has_text_label = false;
     for (const int32 label_id : output_detection.label_id()) {
+      LOG(INFO) << "Detected object with label id " << label_id;
       if (label_map_.find(label_id) != label_map_.end()) {
         output_detection.add_label(label_map_[label_id]);
         has_text_label = true;
+        LOG(INFO) << "Detected object called '" << label_map_[label_id] << "'.";
       }
     }
     // Remove label_id field if text labels exist.
