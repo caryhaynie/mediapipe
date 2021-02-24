@@ -106,7 +106,7 @@ mediapipe::Status OutputSidePacketsToLocalFile(
   return mediapipe::OkStatus();
 }
 
-mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents) {
+mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents, std::string model) {
 //   std::string calculator_graph_config_contents;
 //   MP_RETURN_IF_ERROR(mediapipe::file::GetContents(
 //       FLAGS_calculator_graph_config_file, &calculator_graph_config_contents));
@@ -116,17 +116,21 @@ mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents) {
       mediapipe::ParseTextProtoOrDie<mediapipe::CalculatorGraphConfig>(
           calculator_graph_config_contents);
   std::map<std::string, mediapipe::Packet> input_side_packets;
-  if (!FLAGS_input_side_packets.empty()) {
-    std::vector<std::string> kv_pairs =
-        absl::StrSplit(FLAGS_input_side_packets, ',');
-    for (const std::string& kv_pair : kv_pairs) {
-      std::vector<std::string> name_and_value = absl::StrSplit(kv_pair, '=');
-      RET_CHECK(name_and_value.size() == 2);
-      RET_CHECK(!mediapipe::ContainsKey(input_side_packets, name_and_value[0]));
-      input_side_packets[name_and_value[0]] =
-          mediapipe::MakePacket<std::string>(name_and_value[1]);
-    }
-  }
+//   if (!FLAGS_input_side_packets.empty()) {
+//     std::vector<std::string> kv_pairs =
+//         absl::StrSplit(FLAGS_input_side_packets, ',');
+//     for (const std::string& kv_pair : kv_pairs) {
+//       std::vector<std::string> name_and_value = absl::StrSplit(kv_pair, '=');
+//       RET_CHECK(name_and_value.size() == 2);
+//       RET_CHECK(!mediapipe::ContainsKey(input_side_packets, name_and_value[0]));
+//       input_side_packets[name_and_value[0]] =
+//           mediapipe::MakePacket<std::string>(name_and_value[1]);
+//     }
+//   }
+
+  input_side_packets["box_landmark_model_blob"] = mediapipe::MakePacket<std::string>(model);
+  input_side_packets["allowed_labels"] = mediapipe::MakePacket<std::string>("Mug");
+
   LOG(INFO) << "Initialize the calculator graph.";
   mediapipe::CalculatorGraph graph;
   MP_RETURN_IF_ERROR(graph.Initialize(config, input_side_packets));
@@ -148,8 +152,9 @@ mediapipe::Status RunMPPGraph(std::string calculator_graph_config_contents) {
   return OutputSidePacketsToLocalFile(graph);
 }
 
-EXPORT(absl::StatusCode) UnityObjectron_RunMPPGraph(const char* buffer, int32_t length) {
-    auto status = RunMPPGraph(std::string(buffer, length));
+EXPORT(absl::StatusCode) UnityObjectron_RunMPPGraph(const char* buffer, int32_t length,
+                                                    const char* modelBuffer, int32_t modelLength) {
+    auto status = RunMPPGraph(std::string(buffer, length), std::string(modelBuffer, modelLength));
     LOG(INFO) << "RunMPPGraph returned " << status;
     return status.code();
 }
