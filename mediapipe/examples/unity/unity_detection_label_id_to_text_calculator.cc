@@ -69,29 +69,29 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::GetContract(
 mediapipe::Status UnityDetectionLabelIdToTextCalculator::Open(
     CalculatorContext* cc) {
   LOG(INFO) << __PRETTY_FUNCTION__;
-  cc->SetOffset(TimestampDiff(0));
+  // cc->SetOffset(TimestampDiff(0));
 
-  const auto& options =
-      cc->Options<::mediapipe::DetectionLabelIdToTextCalculatorOptions>();
+  // const auto& options =
+  //     cc->Options<::mediapipe::DetectionLabelIdToTextCalculatorOptions>();
 
-  if (options.has_label_map_path()) {
-    std::string string_path;
-    ASSIGN_OR_RETURN(string_path,
-                     PathToResourceAsFile(options.label_map_path()));
-    std::string label_map_string;
-    MP_RETURN_IF_ERROR(file::GetContents(string_path, &label_map_string));
+  // if (options.has_label_map_path()) {
+  //   std::string string_path;
+  //   ASSIGN_OR_RETURN(string_path,
+  //                    PathToResourceAsFile(options.label_map_path()));
+  //   std::string label_map_string;
+  //   MP_RETURN_IF_ERROR(file::GetContents(string_path, &label_map_string));
 
-    std::istringstream stream(label_map_string);
-    std::string line;
-    int i = 0;
-    while (std::getline(stream, line)) {
-      label_map_[i++] = line;
-    }
-  } else {
-    for (int i = 0; i < options.label_size(); ++i) {
-      label_map_[i] = options.label(i);
-    }
-  }
+  //   std::istringstream stream(label_map_string);
+  //   std::string line;
+  //   int i = 0;
+  //   while (std::getline(stream, line)) {
+  //     label_map_[i++] = line;
+  //   }
+  // } else {
+  //   for (int i = 0; i < options.label_size(); ++i) {
+  //     label_map_[i] = options.label(i);
+  //   }
+  // }
   return mediapipe::OkStatus();
 }
 
