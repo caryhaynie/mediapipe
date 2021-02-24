@@ -57,6 +57,8 @@ class UnityVideoCalculator : public CalculatorBase {
  public:
 
   static mediapipe::Status GetContract(CalculatorContract* cc) {
+      LOG(INFO) << __PRETTY_FUNCTION__;
+
     // cc->InputSidePackets().Tag("INPUT_FILE_PATH").Set<std::string>();
     // cc->InputSidePackets().Tag("INPUT_FILE_PATH").Set<std::string>();
     cc->Outputs().Tag("VIDEO").Set<ImageFrame>();
@@ -70,6 +72,8 @@ class UnityVideoCalculator : public CalculatorBase {
   }
 
   mediapipe::Status Open(CalculatorContext* cc) override {
+      LOG(INFO) << __PRETTY_FUNCTION__;
+
     // const std::string& input_file_path =
     //     cc->InputSidePackets().Tag("INPUT_FILE_PATH").Get<std::string>();
     // cap_ = absl::make_unique<cv::VideoCapture>(input_file_path);
@@ -124,7 +128,7 @@ class UnityVideoCalculator : public CalculatorBase {
   }
 
   mediapipe::Status Process(CalculatorContext* cc) override {
-    LOG(INFO) << "Process called on UnityVideoCalculator";
+    LOG(INFO) << __PRETTY_FUNCTION__;
 
     if (GetImageFrame != nullptr)
     {
@@ -175,6 +179,8 @@ class UnityVideoCalculator : public CalculatorBase {
   }
 
   mediapipe::Status Close(CalculatorContext* cc) override {
+      LOG(INFO) << __PRETTY_FUNCTION__;
+
     // if (cap_ && cap_->isOpened()) {
     //   cap_->release();
     // }

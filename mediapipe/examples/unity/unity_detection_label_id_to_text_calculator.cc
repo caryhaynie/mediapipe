@@ -59,6 +59,7 @@ REGISTER_CALCULATOR(UnityDetectionLabelIdToTextCalculator);
 
 mediapipe::Status UnityDetectionLabelIdToTextCalculator::GetContract(
     CalculatorContract* cc) {
+  LOG(INFO) << __PRETTY_FUNCTION__;
   cc->Inputs().Index(0).Set<std::vector<Detection>>();
   cc->Outputs().Index(0).Set<std::vector<Detection>>();
 
@@ -67,6 +68,7 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::GetContract(
 
 mediapipe::Status UnityDetectionLabelIdToTextCalculator::Open(
     CalculatorContext* cc) {
+  LOG(INFO) << __PRETTY_FUNCTION__;
   cc->SetOffset(TimestampDiff(0));
 
   const auto& options =
@@ -95,6 +97,7 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::Open(
 
 mediapipe::Status UnityDetectionLabelIdToTextCalculator::Process(
     CalculatorContext* cc) {
+  LOG(INFO) << __PRETTY_FUNCTION__;
   std::vector<Detection> output_detections;
   for (const auto& input_detection :
        cc->Inputs().Index(0).Get<std::vector<Detection>>()) {

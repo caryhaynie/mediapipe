@@ -26,17 +26,20 @@ class UnityOutputCalculator : public CalculatorBase {
  public:
 
   static mediapipe::Status GetContract(CalculatorContract* cc) {
+    LOG(INFO) << __PRETTY_FUNCTION__;
     cc->Inputs().Tag(kInputLandmarksTag).Set<std::vector<::mediapipe::NormalizedLandmarkList>>();
     cc->Inputs().Tag(kInputNormRectsTag).Set<std::vector<NormalizedRect>>();
     return mediapipe::OkStatus();
   }
 
   mediapipe::Status Open(CalculatorContext* cc) override {
+    LOG(INFO) << __PRETTY_FUNCTION__;
     return mediapipe::OkStatus();
   }
 
   mediapipe::Status Process(CalculatorContext* cc) override {
-    LOG(INFO) << "Process called on UnityOutputCalculator";
+    LOG(INFO) << __PRETTY_FUNCTION__;
+
     auto landmarks = cc->Inputs().Tag(kInputLandmarksTag).Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
     auto rects = cc->Inputs().Tag(kInputNormRectsTag).Get<std::vector<NormalizedRect>>();
     LOG(INFO) << "landmarks size: " << landmarks.size();
@@ -45,6 +48,7 @@ class UnityOutputCalculator : public CalculatorBase {
   }
 
   mediapipe::Status Close(CalculatorContext* cc) override {
+    LOG(INFO) << __PRETTY_FUNCTION__;
     return mediapipe::OkStatus();
   }
 
