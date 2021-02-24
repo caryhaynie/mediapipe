@@ -3,6 +3,8 @@
 input_stream: "IMAGE:input_video"
 # TfLite model for 3D bounding box landmark prediction
 input_side_packet: "MODEL:box_landmark_model"
+# TfLite model for 2D object detection
+input_side_packet: "MODEL2D:inference_model"
 # Allowed category labels, e.g. Footwear, Coffee cup, Mug, Chair, Camera
 input_side_packet: "LABELS_CSV:allowed_labels"
 # Max number of objects to detect/track. (int)
@@ -79,6 +81,7 @@ node {
   calculator: "UnityObjectDetectionOidV4Subgraph"
   input_stream: "IMAGE:detection_input_video"
   input_side_packet: "LABELS_CSV:allowed_labels"
+  input_side_packet: "MODEL2D:inference_model"
   output_stream: "DETECTIONS:raw_detections"
 }
 

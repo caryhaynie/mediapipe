@@ -1,5 +1,6 @@
 # MediaPipe Objectron 3D object detection on Desktop CPU using Unity.
 input_side_packet: "MODEL_BLOB:box_landmark_model_blob"
+input_side_packet: "MODEL2D_BLOB:inference_model_blob"
 input_side_packet: "LABELS_CSV:allowed_labels"
 
 # Generates side packet with max number of objects to detect/track.
@@ -26,9 +27,16 @@ node {
 }
 
 node {
+  calculator: "TfLiteModelCalculator"
+  input_side_packet: "MODEL2D_BLOB:inference_model_blob"
+  output_side_packet: "MODEL2D:inference_model"
+}
+
+node {
   calculator: "UnityObjectronCpuSubgraph"
   input_stream: "IMAGE:input_video"
   input_side_packet: "MODEL:box_landmark_model"
+  input_side_packet: "MODEL2D:inference_model"
   input_side_packet: "LABELS_CSV:allowed_labels"
   input_side_packet: "MAX_NUM_OBJECTS:max_num_objects"
   output_stream: "MULTI_LANDMARKS:box_landmarks"

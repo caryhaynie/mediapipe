@@ -5,6 +5,7 @@ type: "UnityObjectDetectionOidV4Subgraph"
 
 input_stream: "IMAGE:input_video"
 input_side_packet: "LABELS_CSV:allowed_labels"
+input_side_packet: "MODEL:inference_model"
 output_stream: "DETECTIONS:detections"
 
 # Transforms the input image on CPU to a 300x300 image. To scale the image, by
