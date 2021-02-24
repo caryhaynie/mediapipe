@@ -70,7 +70,7 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::Open(
   cc->SetOffset(TimestampDiff(0));
 
   const auto& options =
-      cc->Options<::mediapipe::UnityDetectionLabelIdToTextCalculatorOptions>();
+      cc->Options<::mediapipe::DetectionLabelIdToTextCalculatorOptions>();
 
   if (options.has_label_map_path()) {
     std::string string_path;

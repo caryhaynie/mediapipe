@@ -83,6 +83,7 @@ cc_library(
 cc_library(
     name = "unity_calculators",
     deps = [
+        ":unity_detection_label_id_to_text_calculator",
         ":unity_output_calculator",
         ":unity_video_calculator"
     ]
