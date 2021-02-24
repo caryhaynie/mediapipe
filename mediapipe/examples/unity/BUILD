@@ -24,6 +24,18 @@ cc_library(
 )
 
 cc_library(
+    name = "graph_interop",
+    srcs = ["graph_interop.cc"],
+    deps = [
+        ":export_header",
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework/port:parse_text_proto",
+        "//mediapipe/framework/port:status",
+        "//mediapipe/framework/tool:status_util"
+    ]
+)
+
+cc_library(
     name = "unity_output_calculator",
     srcs = ["unity_output_calculator.cc"],
     deps = [
@@ -76,6 +88,7 @@ cc_binary(
         "//mediapipe/framework/port:file_helpers",
         "//mediapipe/modules/objectron:objectron_cpu",
         ":unity_calculators",
+        ":graph_interop",
         #"//mediapipe/graphs/object_detection_3d:desktop_cpu_calculators",
         #"//mediapipe/graphs/object_detection_3d:mobile_calculators",
     ],
