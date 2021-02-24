@@ -81,7 +81,7 @@ node {
   calculator: "UnityObjectDetectionOidV4Subgraph"
   input_stream: "IMAGE:detection_input_video"
   input_side_packet: "LABELS_CSV:allowed_labels"
-  input_side_packet: "MODEL2D:inference_model"
+  input_side_packet: "MODEL:inference_model"
   output_stream: "DETECTIONS:raw_detections"
 }
 

@@ -37,6 +37,34 @@ cc_library(
 )
 
 cc_library(
+    name = "unity_detection_label_id_to_text_calculator",
+    srcs = ["unity_detection_label_id_to_text_calculator.cc"],
+    deps = [
+        "//mediapipe/calculators/util:detection_label_id_to_text_calculator_cc_proto",
+        "//mediapipe/framework/formats:detection_cc_proto",
+        "@com_google_absl//absl/container:node_hash_map",
+        "//mediapipe/framework/port:status",
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework:packet",
+        "//mediapipe/util:resource_util",
+    ] + select({
+        "//mediapipe:android": [
+            "//mediapipe/util/android/file/base",
+        ],
+        "//mediapipe:ios": [
+            "//mediapipe/util/android/file/base",
+        ],
+        "//mediapipe:macos": [
+            "//mediapipe/framework/port:file_helpers",
+        ],
+        "//conditions:default": [
+            "//mediapipe/framework/port:file_helpers",
+        ],
+    }),
+    alwayslink = 1,
+)
+
+cc_library(
     name = "unity_output_calculator",
     srcs = ["unity_output_calculator.cc"],
     deps = [
