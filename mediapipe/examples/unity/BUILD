@@ -36,20 +36,7 @@ cc_library(
         "//mediapipe/framework:calculator_framework",
         "//mediapipe/framework:packet",
         "//mediapipe/util:resource_util",
-    ] + select({
-        "//mediapipe:android": [
-            "//mediapipe/util/android/file/base",
-        ],
-        "//mediapipe:ios": [
-            "//mediapipe/util/android/file/base",
-        ],
-        "//mediapipe:macos": [
-            "//mediapipe/framework/port:file_helpers",
-        ],
-        "//conditions:default": [
-            "//mediapipe/framework/port:file_helpers",
-        ],
-    }),
+    ],
     alwayslink = 1,
 )
 
@@ -108,6 +95,23 @@ mediapipe_embed_graph(
     deps = [
         ":unity_calculators",
         "//mediapipe/calculators/core:constant_side_packet_calculator",
+        "//mediapipe/calculators/tflite:tflite_model_calculator",
+        "//mediapipe/examples/unity/subgraphs:unity_cpu_subgraphs",
+    ]
+)
+
+mediapipe_embed_graph(
+    name = "objectron_unity_gpu",
+    graph = "//mediapipe/examples/unity:objectron_unity_gpu.pbtxt",
+    register_as = "UnityObjectronGpuGraph",
+    deps = [
+        ":unity_calculators",
+        "//mediapipe/calculators/core:constant_side_packet_calculator",
+        "//mediapipe/calculators/core:gate_calculator",
+        "//mediapipe/calculators/tflite:tflite_model_calculator",
+        "//mediapipe/calculators/util:association_norm_rect_calculator",
+        "//mediapipe/calculators/util:detections_to_rects_calculator",
+        "//mediapipe/examples/unity/subgraphs:unity_gpu_subgraphs",
     ]
 )
 
@@ -117,6 +121,7 @@ cc_library(
     deps = [
         ":export_header",
         ":objectron_unity_cpu",
+        ":objectron_unity_gpu",
         "//mediapipe/framework:calculator_framework",
         "//mediapipe/framework/port:parse_text_proto",
         "//mediapipe/framework/port:status",
@@ -134,9 +139,6 @@ cc_binary(
         ":export_header",
         ":unity_calculators",
         ":graph_interop",
-        "//mediapipe/calculators/core:constant_side_packet_calculator",
-        "//mediapipe/calculators/tflite:tflite_model_calculator",
-        "//mediapipe/examples/unity/subgraphs:unity_subgraphs",
         #"//mediapipe/modules/objectron:objectron_cpu",
         #"//mediapipe/graphs/object_detection_3d:desktop_cpu_calculators",
         #"//mediapipe/graphs/object_detection_3d:mobile_calculators",

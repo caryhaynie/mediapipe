@@ -6,6 +6,7 @@
 #include "mediapipe/framework/formats/image_frame.h"
 #include "mediapipe/framework/port/status.h"
 #include "mediapipe/framework/tool/status_util.h"
+#include "mediapipe/gpu/gpu_buffer.h"
 
 namespace unity {
   using namespace mediapipe;
@@ -61,7 +62,15 @@ class UnityVideoCalculator : public CalculatorBase {
 
     // cc->InputSidePackets().Tag("INPUT_FILE_PATH").Set<std::string>();
     // cc->InputSidePackets().Tag("INPUT_FILE_PATH").Set<std::string>();
-    cc->Outputs().Tag("VIDEO").Set<ImageFrame>();
+    if (cc->Outputs().HasTag("IMAGE_GPU"))
+    {
+      cc->Outputs().Tag("IMAGE_GPU").Set<GpuBuffer>();
+    }
+    else
+    {
+      cc->Outputs().Tag("VIDEO").Set<ImageFrame>();
+    }
+
     // if (cc->Outputs().HasTag("VIDEO_PRESTREAM")) {
     //   cc->Outputs().Tag("VIDEO_PRESTREAM").Set<VideoHeader>();
     // }
@@ -130,17 +139,30 @@ class UnityVideoCalculator : public CalculatorBase {
   mediapipe::Status Process(CalculatorContext* cc) override {
     LOG(INFO) << __PRETTY_FUNCTION__;
 
-    if (GetImageFrame != nullptr)
+    uint64_t ts;
+
+    if (cc->Outputs().HasTag("IMAGE_GPU"))
     {
-        uint64_t ts;
-        auto imageFrame = GetImageFrame(&ts);
-        Timestamp timestamp(ts);
-        if (imageFrame != nullptr && prev_timestamp_ < timestamp)
-        {
-            LOG(INFO) << "Got image frame " << imageFrame->Width() << "x" << imageFrame->Height() << ": " << imageFrame->Format() << "(" << imageFrame->PixelDataSizeStoredContiguously() << " bytes)";
-            cc->Outputs().Tag("VIDEO").Add(imageFrame, timestamp);
-            prev_timestamp_ = timestamp;
-        }
+      // TODO :: GPU impl
+      // GpuBuffer buffer; // = ???
+      // Timestamp timestamp(ts);
+      // cc->Outputs().Tag("GPU_IMAGE").Add(buffer, timestamp);
+      // prev_timestamp_ = timestamp;
+    }
+    else
+    {
+      if (GetImageFrame != nullptr)
+      {
+          uint64_t ts;
+          auto imageFrame = GetImageFrame(&ts);
+          Timestamp timestamp(ts);
+          if (imageFrame != nullptr && prev_timestamp_ < timestamp)
+          {
+              LOG(INFO) << "Got image frame " << imageFrame->Width() << "x" << imageFrame->Height() << ": " << imageFrame->Format() << "(" << imageFrame->PixelDataSizeStoredContiguously() << " bytes)";
+              cc->Outputs().Tag("VIDEO").Add(imageFrame, timestamp);
+              prev_timestamp_ = timestamp;
+          }
+      }
     }
 
     // auto image_frame = absl::make_unique<ImageFrame>(format_, width_, height_,
