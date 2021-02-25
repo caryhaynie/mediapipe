@@ -43,6 +43,11 @@ public:
         LOG_AND_RETURN(m_Graph.StartRun({}));
     }
 
+    mediapipe::Status WaitForObservedOutput()
+    {
+        LOG_AND_RETURN(m_Graph.WaitForObservedOutput());
+    }
+
 private:
     mediapipe::CalculatorGraph m_Graph;
     mediapipe::CalculatorGraphConfig m_Config;
@@ -67,6 +72,11 @@ EXPORT(absl::StatusCode) UnityMediaPipe_Graph_Initialize(Graph* self)
 EXPORT(absl::StatusCode) UnityMediaPipe_Graph_Start(Graph* self)
 {
     return self->Start().code();
+}
+
+EXPORT(absl::StatusCode) UnityMediaPipe_Graph_WaitForObservedOutput(Graph* self)
+{
+    return self->WaitForObservedOutput().code();
 }
 
 }  // namespace mediapipe

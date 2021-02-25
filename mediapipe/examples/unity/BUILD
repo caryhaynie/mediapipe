@@ -29,6 +29,7 @@ cc_library(
     name = "unity_detection_label_id_to_text_calculator",
     srcs = ["unity_detection_label_id_to_text_calculator.cc"],
     deps = [
+        ":export_header",
         "//mediapipe/calculators/util:detection_label_id_to_text_calculator_cc_proto",
         "//mediapipe/framework/formats:detection_cc_proto",
         "@com_google_absl//absl/container:node_hash_map",

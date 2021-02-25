@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "export.h"
 #include "absl/container/node_hash_map.h"
 #include "mediapipe/calculators/util/detection_label_id_to_text_calculator.pb.h"
 #include "mediapipe/framework/calculator_framework.h"
@@ -238,17 +239,24 @@ namespace mediapipe {
 //     }
 //   }
 // }
+
+typedef void(*on_object_detected_t)(int, float);
+
 class UnityDetectionLabelIdToTextCalculator : public CalculatorBase {
  public:
   static mediapipe::Status GetContract(CalculatorContract* cc);
+  static void SetCallbacks(on_object_detected_t onObjectDetected);
 
   mediapipe::Status Open(CalculatorContext* cc) override;
   mediapipe::Status Process(CalculatorContext* cc) override;
 
  private:
   absl::node_hash_map<int, std::string> label_map_;
+  static on_object_detected_t OnObjectDetected;
 };
 REGISTER_CALCULATOR(UnityDetectionLabelIdToTextCalculator);
+
+on_object_detected_t UnityDetectionLabelIdToTextCalculator::OnObjectDetected = nullptr;
 
 mediapipe::Status UnityDetectionLabelIdToTextCalculator::GetContract(
     CalculatorContract* cc) {
@@ -257,6 +265,12 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::GetContract(
   cc->Outputs().Index(0).Set<std::vector<Detection>>();
 
   return mediapipe::OkStatus();
+}
+
+void UnityDetectionLabelIdToTextCalculator::SetCallbacks(on_object_detected_t onObjectDetected)
+{
+    LOG(INFO) << __PRETTY_FUNCTION__ << ": Callbacks set " << onObjectDetected;
+    OnObjectDetected = onObjectDetected;
 }
 
 mediapipe::Status UnityDetectionLabelIdToTextCalculator::Open(
@@ -278,6 +292,16 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::Process(
     output_detections.push_back(input_detection);
     Detection& output_detection = output_detections.back();
     bool has_text_label = false;
+
+    if (OnObjectDetected) {
+        for (int i = 0; i < output_detection.label_id_size(); i++) {
+            int32_t labelId = output_detection.label_id(i);
+            float score = output_detection.score(i);
+            OnObjectDetected(labelId, score);
+            LOG(INFO) << "Log here " << labelId << " " << score;
+        }
+    }
+
     for (const int32 label_id : output_detection.label_id()) {
       LOG(INFO) << "Detected object with label id " << label_id;
       if (label_map_.find(label_id) != label_map_.end()) {
@@ -295,6 +319,11 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::Process(
       MakePacket<std::vector<Detection>>(output_detections)
           .At(cc->InputTimestamp()));
   return mediapipe::OkStatus();
+}
+
+EXPORT(void) UnityMediaPipe_DetectionLabelIdToTextCalculator_SetCallbacks(on_object_detected_t onObjectDetected)
+{
+    UnityDetectionLabelIdToTextCalculator::SetCallbacks(onObjectDetected);
 }
 
 }  // namespace mediapipe
