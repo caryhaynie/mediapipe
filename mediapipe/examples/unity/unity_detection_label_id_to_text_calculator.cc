@@ -20,14 +20,207 @@
 #include "mediapipe/framework/port/status.h"
 #include "mediapipe/util/resource_util.h"
 
-#if defined(MEDIAPIPE_MOBILE)
-#include "mediapipe/util/android/file/base/file.h"
-#include "mediapipe/util/android/file/base/helpers.h"
-#else
-#include "mediapipe/framework/port/file_helpers.h"
-#endif
-
 namespace mediapipe {
+
+  void init_map(absl::node_hash_map<int, std::string>& map)
+  {
+    map.insert({
+      {0,"???"},
+      {1,"Container"},
+      {2,"Ambulance"},
+      {3,"Ladder"},
+      {4,"Toothbrush"},
+      {5,"Sink"},
+      {6,"Cassette deck"},
+      {7,"Beer"},
+      {8,"Parking meter"},
+      {9,"Traffic light"},
+      {10,"Washing machine"},
+      {11,"Sunglasses"},
+      {12,"Ball"},
+      {13,"Backpack"},
+      {14,"Bicycle"},
+      {15,"Home appliance"},
+      {16,"Boat"},
+      {17,"Boot"},
+      {18,"Headphones"},
+      {19,"Bus"},
+      {20,"Screwdriver"},
+      {21,"Laptop"},
+      {22,"Teapot"},
+      {23,"Person"},
+      {24,"Swimwear"},
+      {25,"Balloon"},
+      {26,"Wrench"},
+      {27,"Vehicle registration plate"},
+      {28,"Lantern"},
+      {29,"Toaster"},
+      {30,"Flashlight"},
+      {31,"Billboard"},
+      {32,"Limousine"},
+      {33,"Necklace"},
+      {34,"Scissors"},
+      {35,"Stairs"},
+      {36,"Computer keyboard"},
+      {37,"Printer"},
+      {38,"Traffic sign"},
+      {39,"Chair"},
+      {40,"Poster"},
+      {41,"Fire hydrant"},
+      {42,"Land vehicle"},
+      {43,"Cabinetry"},
+      {44,"Suitcase"},
+      {45,"Snowmobile"},
+      {46,"Clock"},
+      {47,"Cattle"},
+      {48,"Cello"},
+      {49,"Desk"},
+      {50,"Cat"},
+      {51,"Computer mouse"},
+      {52,"Calculator"},
+      {53,"Computer monitor"},
+      {54,"Box"},
+      {55,"Stapler"},
+      {56,"Studio couch"},
+      {57,"Drum"},
+      {58,"Dice"},
+      {59,"Oven"},
+      {60,"Couch"},
+      {61,"Whiteboard"},
+      {62,"Door"},
+      {63,"Hat"},
+      {64,"Eraser"},
+      {65,"Tin can"},
+      {66,"Mug"},
+      {67,"Can opener"},
+      {68,"Goggles"},
+      {69,"Roller skates"},
+      {70,"Coffee cup"},
+      {71,"Cutting board"},
+      {72,"Blender"},
+      {73,"Stop sign"},
+      {74,"Volleyball"},
+      {75,"Vase"},
+      {76,"Slow cooker"},
+      {77,"Wardrobe"},
+      {78,"Paper towel"},
+      {79,"Sun hat"},
+      {80,"Tree house"},
+      {81,"Gas stove"},
+      {82,"Salt and pepper shakers"},
+      {83,"Mechanical fan"},
+      {84,"Fax"},
+      {85,"Nightstand"},
+      {86,"Barrel"},
+      {87,"Guitar"},
+      {88,"Pillow"},
+      {89,"Stationary bicycle"},
+      {90,"Hammer"},
+      {91,"Ceiling fan"},
+      {92,"Sofa bed"},
+      {93,"Sandal"},
+      {94,"Bicycle helmet"},
+      {95,"Bed"},
+      {96,"Kettle"},
+      {97,"Hair dryer"},
+      {98,"Kitchenware"},
+      {99,"Bookcase"},
+      {100,"Refrigerator"},
+      {101,"Alarm clock"},
+      {102,"Filing cabinet"},
+      {103,"Table"},
+      {104,"Knife"},
+      {105,"Bottle"},
+      {106,"Dumbbell"},
+      {107,"Bowl"},
+      {108,"Billiard table"},
+      {109,"Motorcycle"},
+      {110,"Frying pan"},
+      {111,"Bathroom cabinet"},
+      {112,"Plate"},
+      {113,"Mobile phone"},
+      {114,"Table tennis racket"},
+      {115,"Musical keyboard"},
+      {116,"Scoreboard"},
+      {117,"Briefcase"},
+      {118,"Kitchen knife"},
+      {119,"Piano"},
+      {120,"Pumpkin"},
+      {121,"Infant bed"},
+      {122,"Mixer"},
+      {123,"Cupboard"},
+      {124,"Digital clock"},
+      {125,"Rifle"},
+      {126,"Skateboard"},
+      {127,"High heels"},
+      {128,"Snowboard"},
+      {129,"Sword"},
+      {130,"Training bench"},
+      {131,"Coffee table"},
+      {132,"Television"},
+      {133,"Trombone"},
+      {134,"Tank"},
+      {135,"Telephone"},
+      {136,"Trumpet"},
+      {137,"Train"},
+      {138,"Picnic basket"},
+      {139,"Football helmet"},
+      {140,"Truck"},
+      {141,"Measuring cup"},
+      {142,"Coffeemaker"},
+      {143,"Violin"},
+      {144,"Vehicle"},
+      {145,"Wine"},
+      {146,"Wheel"},
+      {147,"Jug"},
+      {148,"Toilet"},
+      {149,"Clothing"},
+      {150,"Footwear"},
+      {151,"Tablet computer"},
+      {152,"Dog"},
+      {153,"Book"},
+      {154,"Candle"},
+      {155,"Hand dryer"},
+      {156,"Soap dispenser"},
+      {157,"Furniture"},
+      {158,"Airplane"},
+      {159,"Spoon"},
+      {160,"Bench"},
+      {161,"Window"},
+      {162,"Closet"},
+      {163,"Fork"},
+      {164,"Lamp"},
+      {165,"Camera"},
+      {166,"Racket"},
+      {167,"Human face"},
+      {168,"Unicycle"},
+      {169,"Flowerpot"},
+      {170,"Drawer"},
+      {171,"Stool"},
+      {172,"Microwave oven"},
+      {173,"Shelf"},
+      {174,"Handgun"},
+      {175,"Van"},
+      {176,"Corded phone"},
+      {177,"Tennis racket"},
+      {178,"Wall clock"},
+      {179,"Kitchen & dining room table"},
+      {180,"Pressure cooker"},
+      {181,"Kitchen appliance"},
+      {182,"Tire"},
+      {183,"Luggage and bags"},
+      {184,"Microphone"},
+      {185,"Glasses"},
+      {186,"Pen"},
+      {187,"Car"},
+      {188,"Aircraft"},
+      {189,"Dishwasher"},
+      {190,"Binoculars"},
+      {191,"Rays and skates"},
+      {192,"Remote control"},
+      {193,"Wheelchair"},
+      {194,"Helmet"}});
+  }
 
 // Takes a label map (from label IDs to names), and replaces the label IDs
 // in Detection protos with label names. Note that the calculator makes a copy
@@ -69,31 +262,10 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::GetContract(
 mediapipe::Status UnityDetectionLabelIdToTextCalculator::Open(
     CalculatorContext* cc) {
   LOG(INFO) << __PRETTY_FUNCTION__;
-  // cc->SetOffset(TimestampDiff(0));
+  cc->SetOffset(TimestampDiff(0));
 
-  label_map_[150] = "Footwear";
+  init_map(label_map_);
 
-  // const auto& options =
-  //     cc->Options<::mediapipe::DetectionLabelIdToTextCalculatorOptions>();
-
-  // if (options.has_label_map_path()) {
-  //   std::string string_path;
-  //   ASSIGN_OR_RETURN(string_path,
-  //                    PathToResourceAsFile(options.label_map_path()));
-  //   std::string label_map_string;
-  //   MP_RETURN_IF_ERROR(file::GetContents(string_path, &label_map_string));
-
-  //   std::istringstream stream(label_map_string);
-  //   std::string line;
-  //   int i = 0;
-  //   while (std::getline(stream, line)) {
-  //     label_map_[i++] = line;
-  //   }
-  // } else {
-  //   for (int i = 0; i < options.label_size(); ++i) {
-  //     label_map_[i] = options.label(i);
-  //   }
-  // }
   return mediapipe::OkStatus();
 }
 
