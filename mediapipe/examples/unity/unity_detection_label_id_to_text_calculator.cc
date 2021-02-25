@@ -71,6 +71,8 @@ mediapipe::Status UnityDetectionLabelIdToTextCalculator::Open(
   LOG(INFO) << __PRETTY_FUNCTION__;
   // cc->SetOffset(TimestampDiff(0));
 
+  label_map_[150] = "Footwear";
+
   // const auto& options =
   //     cc->Options<::mediapipe::DetectionLabelIdToTextCalculatorOptions>();
 
