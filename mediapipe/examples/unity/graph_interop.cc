@@ -15,6 +15,7 @@
 
 namespace mediapipe {
     StatusOr<CalculatorGraphConfig> LoadUnityObjectronCpuGraphConfig();
+    StatusOr<CalculatorGraphConfig> LoadUnityObjectronGpuGraphConfig();
 }
 
 namespace unity {
@@ -22,10 +23,13 @@ namespace unity {
 
 class Graph {
 public:
-    Graph()
+    Graph(CalculatorGraphConfig config, bool isGpu = false)
     {
-        m_Config = mediapipe::LoadUnityObjectronCpuGraphConfig().ValueOrDie();
+        m_Config = config;
+        m_IsGpu = isGpu;
     }
+
+    bool IsGpu() const { return m_IsGpu; }
 
     template<typename T>
     void SetInputSidePacket(const std::string& key, const T& value)
@@ -52,9 +56,23 @@ private:
     mediapipe::CalculatorGraph m_Graph;
     mediapipe::CalculatorGraphConfig m_Config;
     std::map<std::string, mediapipe::Packet> m_InputSidePackets;
+    bool m_IsGpu;
 };
 
-EXPORT(Graph*) UnityMediaPipe_Graph_Construct_() { return new Graph(); }
+EXPORT(Graph*) UnityMediaPipe_Graph_Construct_()
+{
+    return new Graph(mediapipe::LoadUnityObjectronCpuGraphConfig().ValueOrDie());
+}
+
+EXPORT(Graph*) UnityMediaPipe_Graph_Construct_Gpu_()
+{
+    return new Graph(mediapipe::LoadUnityObjectronGpuGraphConfig().ValueOrDie(), true);
+}
+
+EXPORT(bool) UnityMediaPipe_Graph_IsGpu(Graph* self)
+{
+    return self->IsGpu();
+}
 
 EXPORT(void) UnityMediaPipe_Graph_SetStringInputSidePacket(
     Graph* self, const char* key, int32_t keyLength,

@@ -22,20 +22,58 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:private"])
 
 mediapipe_simple_subgraph(
+    name = "box_landmark_gpu",
+    graph = "box_landmark_gpu.pbtxt",
+    register_as = "UnityBoxLandmarkSubgraphGpu",
+    deps = [
+        "//mediapipe/calculators/core:gate_calculator",
+        "//mediapipe/calculators/core:split_vector_calculator",
+        "//mediapipe/calculators/image:image_properties_calculator",
+        "//mediapipe/calculators/tensor:image_to_tensor_calculator",
+        "//mediapipe/calculators/tensor:inference_calculator",
+        "//mediapipe/calculators/tensor:tensors_to_floats_calculator",
+        "//mediapipe/calculators/tensor:tensors_to_landmarks_calculator",
+        "//mediapipe/calculators/util:detections_to_rects_calculator",
+        "//mediapipe/calculators/util:landmark_letterbox_removal_calculator",
+        "//mediapipe/calculators/util:landmark_projection_calculator",
+        "//mediapipe/calculators/util:landmarks_to_detection_calculator",
+        "//mediapipe/calculators/util:rect_transformation_calculator",
+        "//mediapipe/calculators/util:thresholding_calculator",
+    ],
+)
+
+mediapipe_simple_subgraph(
     name = "object_detection_oid_v4_cpu",
     graph = "object_detection_oid_v4_cpu.pbtxt",
-    register_as = "UnityObjectDetectionOidV4Subgraph",
+    register_as = "UnityObjectDetectionOidV4SubgraphCpu",
     deps = [
         "//mediapipe/calculators/image:image_transformation_calculator",
         "//mediapipe/calculators/tflite:ssd_anchors_calculator",
         "//mediapipe/calculators/tflite:tflite_converter_calculator",
         "//mediapipe/calculators/tflite:tflite_inference_calculator",
         "//mediapipe/calculators/tflite:tflite_tensors_to_detections_calculator",
-        "//mediapipe/calculators/util:detection_label_id_to_text_calculator",
+        "//mediapipe/examples/unity:unity_detection_label_id_to_text_calculator",
         "//mediapipe/calculators/util:non_max_suppression_calculator",
         "//mediapipe/modules/objectron/calculators:filter_detection_calculator",
     ],
 )
+
+mediapipe_simple_subgraph(
+    name = "object_detection_oid_v4_gpu",
+    graph = "object_detection_oid_v4_cpu.pbtxt",
+    register_as = "UnityObjectDetectionOidV4SubgraphGpu",
+    deps = [
+        "//mediapipe/calculators/image:image_transformation_calculator",
+        "//mediapipe/calculators/tflite:ssd_anchors_calculator",
+        "//mediapipe/calculators/tflite:tflite_converter_calculator",
+        "//mediapipe/calculators/tflite:tflite_inference_calculator",
+        "//mediapipe/calculators/tflite:tflite_tensors_to_detections_calculator",
+        "//mediapipe/examples/unity:unity_detection_label_id_to_text_calculator",
+        "//mediapipe/calculators/util:non_max_suppression_calculator",
+        "//mediapipe/modules/objectron/calculators:filter_detection_calculator",
+    ],
+)
+
 
 mediapipe_simple_subgraph(
     name = "objectron_cpu",
@@ -61,10 +99,19 @@ mediapipe_simple_subgraph(
 )
 
 cc_library(
-    name = "unity_subgraphs",
+    name = "unity_cpu_subgraphs",
     deps = [
         ":object_detection_oid_v4_cpu",
         ":objectron_cpu"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+cc_library(
+    name = "unity_gpu_subgraphs",
+    deps = [
+        ":box_landmark_gpu",
+        ":object_detection_oid_v4_gpu"
     ],
     visibility = ["//visibility:public"]
 )
